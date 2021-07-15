@@ -41,7 +41,7 @@ df = pd.DataFrame(schedule, columns = headers[1:])
 df['Date'] = date
     
  
-df.to_csv('/home/dalton/Desktop/betting/schedule.csv')    
+df.to_csv('/home/dalton/Desktop/betting/schedule.csv', index = False)    
  
 
 
@@ -57,7 +57,7 @@ headers2 = [th.getText() for th in rows2[0].findAll('th')]
 stats2 = [[td.getText() for td in rows2[i].findAll('td')] for i in np.arange(1,len(rows2))]
 
 df2 = pd.DataFrame(stats2, columns = headers2[1:])
-df2.to_csv('/home/dalton/Desktop/betting/per100poss_team.csv')
+df2.to_csv('/home/dalton/Desktop/betting/per100poss_team.csv', index = False)
 
 
 tab3 = alltab[9]
@@ -66,7 +66,7 @@ headers3 = [th.getText() for th in rows3[0].findAll('th')]
 stats3 = [[td.getText() for td in rows3[i].findAll('td')] for i in np.arange(1,len(rows3))]
 
 df3 = pd.DataFrame(stats3, columns = headers3[1:])
-df3.to_csv('/home/dalton/Desktop/betting/per100poss_oppo.csv')
+df3.to_csv('/home/dalton/Desktop/betting/per100poss_oppo.csv', index = False)
 
 
 
@@ -80,7 +80,7 @@ headers4 = [th.getText() for th in rows4[1].findAll('th')]
 stats4 = [[td.getText() for td in rows4[i].findAll('td')] for i in np.arange(2,len(rows4)-1)]
 
 df4 = pd.DataFrame(stats4, columns = headers4[1:])
-df4.to_csv('/home/dalton/Desktop/betting/shooting_team.csv')
+df4.to_csv('/home/dalton/Desktop/betting/shooting_team.csv', index = False)
 
 
 tab5 = alltab[12]
@@ -89,4 +89,4 @@ headers5 = [th.getText() for th in rows5[1].findAll('th')]
 stats5 = [[td.getText() for td in rows5[i].findAll('td')] for i in np.arange(2,len(rows5)-1)]
 
 df5 = pd.DataFrame(stats5, columns = headers5[1:])
-df5.to_csv('/home/dalton/Desktop/betting/shooting_oppo.csv')
+df5.to_csv('/home/dalton/Desktop/betting/shooting_oppo.csv', index =  False)

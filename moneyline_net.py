@@ -13,6 +13,7 @@ import torch.nn as nn
 import torch.functional as F
 import torch.optim as optim
 
+FOLDER_PATH = '/home/dalton/Desktop/betting/'
 
 class moneyline_net(nn.Module):
     
@@ -65,6 +66,7 @@ class moneyline_net(nn.Module):
             print('====> Epoch: {} train_loss: {:.4f}, train_score: {:.4f}, test_loss: {:.4f}, test_score: {:.4f}'.format(epoch, train_loss, train_score, test_loss, test_score ))
 
             
+Y = pd.read_csv('{}targets.csv'.format(FOLDER_PATH))
         
         
         

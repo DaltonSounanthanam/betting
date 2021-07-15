@@ -9,18 +9,19 @@ Created on Wed Jul 14 18:50:30 2021
 import pandas as pd 
 import numpy as np
 
+FOLDER_PATH = '/home/dalton/Desktop/betting/'
 
 ### drop the nan value row and useless columns ### this task should be automatized
-schedule = pd.read_csv('/home/dalton/Desktop/betting/schedule.csv')
-schedule = schedule.drop(['Unnamed: 0', 'Notes'], axis = 1)
+schedule = pd.read_csv('{}schedule.csv'.format(FOLDER_PATH))
+schedule = schedule.drop(['Notes'], axis = 1)
 schedule = schedule.drop(index = 1230, axis = 0)
 
 
-stats = pd.read_csv('/home/dalton/Desktop/betting/per100poss_team.csv')
-stats = stats.drop(['G', 'MP', 'Unnamed: 0'], axis = 1)
+stats = pd.read_csv('{}per100poss_team.csv'.format(FOLDER_PATH))
+stats = stats.drop(['G', 'MP'], axis = 1)
 
-stats2 = pd.read_csv('/home/dalton/Desktop/betting/per100poss_oppo.csv')
-stats2 = stats2.drop(['G', 'MP', 'Unnamed: 0'], axis = 1)
+stats2 = pd.read_csv('{}per100poss_oppo.csv'.format(FOLDER_PATH))
+stats2 = stats2.drop(['G', 'MP'], axis = 1)
 
 
 target_list = []
@@ -35,6 +36,8 @@ for i in np.arange(schedule.shape[0]):
         target_list.append(0.0)
     
 schedule.to_csv('game_data.csv')
+target = pd.DataFrame(target_list, columns = ['home_team_win'] )
+target.to_csv('{}targets.csv'.format(FOLDER_PATH))
 
 row_list = []
 
@@ -54,5 +57,5 @@ for i in np.arange(schedule.shape[0]):
     row_list.append(result)
     
 data = pd.concat(row_list, axis = 0 )    
-data.to_csv('/home/dalton/Desktop/betting/features.csv')
+data.to_csv('{}features.csv'.format(FOLDER_PATH))
     
