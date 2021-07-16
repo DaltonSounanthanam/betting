@@ -23,7 +23,8 @@ class moneyline_net(nn.Module):
         
         self.layer0 = nn.BatchNorm1d(84)
         self.layer1 = nn.Linear(84,42)
-        #self.layer2 = nn.Linear(42, 42)
+        self.layer2 = nn.Linear(42, 42)
+        self.dropout = nn.Dropout(p = 0.5)
         self.layer3 = nn.Linear(42,1)
         
     def forward(self, x):
@@ -31,8 +32,9 @@ class moneyline_net(nn.Module):
         x = self.layer0(x)
         x = self.layer1(x)
         x = nn.functional.relu(x)
-        #x = self.layer2(x)
-        #x = nn.functional.relu(x)
+        x = self.dropout(x)
+        x = self.layer2(x)
+        x = nn.functional.relu(x)
         x = self.layer3(x)
         x = torch.sigmoid(x)
         return x
@@ -40,7 +42,7 @@ class moneyline_net(nn.Module):
     def train(self, X, Y, learning_rate = 0.01, iterations = 10):
         
         criterion = nn.BCELoss()
-        optimizer = optim.Adam( self.parameters(), lr = learning_rate) 
+        optimizer = optim.Adam( self.parameters(), lr = learning_rate, weight_decay = 0.001) 
         loss = 0
         for i in range(iterations):
             optimizer.zero_grad()
@@ -80,7 +82,7 @@ X_test = torch.tensor(features[1000:]).float()
 net = moneyline_net()
 
 
-net.Train(X_train, Y_train, X_test, Y_test, 0.001, 100, 10)
+net.Train(X_train, Y_train, X_test, Y_test, 0.01, 50, 10)
 
 
         
