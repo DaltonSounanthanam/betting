@@ -16,12 +16,12 @@ from scipy.special import comb
 def expected_unit_earning(c,p):
     if p > 1:
         raise ValueError
-    return c*p - 1*(1-p)
+    return (c-1)*p - 1*(1-p)
 
 def unit_earning(c,p):
     np.random.seed()
     if np.random.uniform() < p:
-        return c
+        return c-1
     else:
         return -1
 
@@ -33,7 +33,7 @@ def sim_earning(c, p, T, seed = -1):
     else:
         np.random.seed(seed)
     outcome = np.random.binomial(1, p, T)
-    total_earning = c*np.sum(outcome) - T + np.sum(outcome)
+    total_earning = (c-1)*np.sum(outcome) - T + np.sum(outcome)
     return total_earning
 
 
@@ -42,7 +42,7 @@ def sim_earning(c, p, T, seed = -1):
 def prob_negative_earning(c,p,T):
     i = 0
     prob = 0
-    while i < T/(c + 1):
+    while i < T/c:
         prob = prob + comb(T,i)*p**i*(1 - p)**(T-i)
         i = i + 1
     return prob
@@ -52,20 +52,20 @@ def prob_positive_earning(c, p, T):
 
 
 def Odd_to_probabilty(Odd):
-    return 1/(Odd + 1)
+    return 1/Odd
 
 
 def prob_bankruptcy(c, p, T, b, cash):
     i = 0
     prob = 0
-    while i < (b*T - cash)/(c*b + b):
+    while i < (b*T - cash)/(c*b):
         prob = prob + comb(T,i)*p**i*(1 - p)**(T-i)
         i = i + 1
     return prob
 
 
 def money_vs_time(c, p, T, b, cash):
-    return (T*b*(c*p - (1-p))/cash) + 1
+    return (T*b*((c-1)*p - (1-p))/cash) + 1
 
 #### create a heatmap
 
@@ -143,11 +143,19 @@ for i in range(10):
 ax4.set_xlabel('Number of bet')
 ax4.set_ylabel('Ratio Payroll/InitialCash (Returns)')
 ax4.set_title('Returns vs time')
+
+
 ### How to identify good betting value ?
 
+# We need to find bet  with high odd and high probability. 
+# The odd are given by the gambling house, the probability are unknown so we need to find a way to estimate those probabilities.
+# I focused on the NBA because it's a sport I am used to bet manually. The NBA  has a lot of statistical numbers available, a very high number of games each season.
+# Thus training machine learning algorithms on NBA games is easily feasible.
 
-### Pari interessant ###
-# remontada du champion, equipe mene reviens au score
-# combine stats joueur et nb de points, nb de goal
-# offset bet, two bet are winnable and offset each other when there is a lost
+# To keep it simple we focus only on moneyline bet and general game numbers bet, we keep the bet on individual stats for later
+
+
+
+
+
 
