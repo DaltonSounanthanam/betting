@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.special import comb
+import math
 
 
 
@@ -56,11 +57,9 @@ def Odd_to_probabilty(Odd):
 
 
 def prob_bankruptcy(c, p, T, b, cash):
-    i = 0
     prob = 0
-    while i < (b*T - cash)/(c*b):
-        prob = prob + comb(T,i)*p**i*(1 - p)**(T-i)
-        i = i + 1
+    i = math.ceil((b*T - cash)/(c*b))
+    prob = comb(T-1,i-1)*p**i*(1 - p)**(T-i)
     return prob
 
 
@@ -137,7 +136,7 @@ fig4, ax4 = plt.subplots()
 for i in range(10):
     pbt = np.zeros(100)
     for t in np.arange(1, 100 + 1):
-        pbt[t - 1] = money_vs_time(1.5, 0.5, t, i + 1, 100)
+        pbt[t - 1] = money_vs_time(2.5, 0.5, t, i + 1, 100)
     ax4.plot(pbt, ls = 'solid')
 
 ax4.set_xlabel('Number of bet')
