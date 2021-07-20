@@ -37,7 +37,9 @@ for i in np.arange(schedule.shape[0]):
     
 schedule.to_csv('game_data.csv')
 target = pd.DataFrame(target_list, columns = ['home_team_win'] )
-target.to_csv('{}targets.csv'.format(FOLDER_PATH))
+index = np.random.permutation(len(target))
+target = target.iloc[index].reset_index(drop =  True)
+target.to_csv('{}targets3.csv'.format(FOLDER_PATH), index = False)
 
 row_list = []
 
@@ -53,9 +55,12 @@ for i in np.arange(schedule.shape[0]):
     hstats_oppo.reset_index(drop = True, inplace = True) 
     vstats_team.reset_index(drop = True, inplace = True) 
     vstats_oppo.reset_index(drop = True, inplace = True)
-    result = pd.concat([hstats_team, hstats_oppo, vstats_team, vstats_oppo], axis = 1)
+    #result = pd.concat([hstats_team , vstats_team, hstats_oppo , vstats_oppo], axis = 1)
+    result = hstats_team - vstats_team
     row_list.append(result)
     
-data = pd.concat(row_list, axis = 0 )    
-data.to_csv('{}features.csv'.format(FOLDER_PATH))
+data = pd.concat(row_list, axis = 0 )
+data = data.iloc[index].reset_index(drop = True)    
+data.to_csv('{}features3.csv'.format(FOLDER_PATH), index = False)
     
+### need to shuffle the dataset
