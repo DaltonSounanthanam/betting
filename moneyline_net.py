@@ -21,22 +21,22 @@ class moneyline_net(nn.Module):
     def __init__(self):
         super(moneyline_net, self).__init__()
         
-        self.layer0 = nn.BatchNorm1d(84)
-        self.layer1 = nn.Linear(84,42)
-        self.layer2 = nn.Linear(42, 42)
-        self.dropout = nn.Dropout(p = 0.5)
-        self.layer3 = nn.Linear(42,1)
+        self.layer0 = nn.BatchNorm1d(21)
+        self.layer1 = nn.Linear(21,42)
+        self.layer2 = nn.Linear(42, 21)
+        #self.dropout = nn.Dropout(p = 0)
+        self.layer3 = nn.Linear(21,1)
         
     def forward(self, x):
         
         x = self.layer0(x)
         x = self.layer1(x)
-        x = nn.functional.relu(x)
-        x = self.dropout(x)
+        x = nn.functional.tanh(x)
+        #x = self.dropout(x)
         x = self.layer2(x)
-        x = nn.functional.relu(x)
+        x = nn.functional.tanh(x)
         x = self.layer3(x)
-        x = torch.sigmoid(x)
+        x = (torch.tanh(x) + 1)/2
         return x
         
     def train(self, X, Y, learning_rate = 0.01, iterations = 10):
@@ -71,18 +71,18 @@ class moneyline_net(nn.Module):
             print('====> Epoch: {} train_loss: {:.4f}, train_score: {:.4f}, test_loss: {:.4f}, test_score: {:.4f}'.format(epoch, train_loss, train_score, test_loss, test_score ))
 
             
-targets = pd.read_csv('{}targets.csv'.format(FOLDER_PATH)).values
+targets = pd.read_csv('{}targets3.csv'.format(FOLDER_PATH)).values
 Y_train = torch.tensor(targets[:1000]).float()
 Y_test = torch.tensor(targets[1000:]).float()
 
-features = pd.read_csv('{}features.csv'.format(FOLDER_PATH)).values
+features = pd.read_csv('{}features3.csv'.format(FOLDER_PATH)).values
 X_train = torch.tensor(features[:1000]).float()
 X_test = torch.tensor(features[1000:]).float()
         
 net = moneyline_net()
 
 
-net.Train(X_train, Y_train, X_test, Y_test, 0.01, 50, 10)
+net.Train(X_train, Y_train, X_test, Y_test, 0.01, 150, 10)
 
 
         

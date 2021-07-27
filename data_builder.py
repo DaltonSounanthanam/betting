@@ -63,4 +63,3 @@ data = pd.concat(row_list, axis = 0 )
 data = data.iloc[index].reset_index(drop = True)    
 data.to_csv('{}features3.csv'.format(FOLDER_PATH), index = False)
     
-### need to shuffle the dataset

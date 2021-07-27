@@ -15,6 +15,8 @@ from urllib.request import urlopen
 
 year = 2019
 
+FOLDER_PATH = '/home/dalton/Desktop/betting/'
+
 
 ### Scrap the schedule and results of the regular season ###
 
@@ -41,7 +43,7 @@ df = pd.DataFrame(schedule, columns = headers[1:])
 df['Date'] = date
     
  
-df.to_csv('/home/dalton/Desktop/betting/schedule.csv', index = False)    
+df.to_csv('{}schedule.csv'.format(FOLDER_PATH), index = False)    
  
 
 
@@ -57,7 +59,7 @@ headers2 = [th.getText() for th in rows2[0].findAll('th')]
 stats2 = [[td.getText() for td in rows2[i].findAll('td')] for i in np.arange(1,len(rows2))]
 
 df2 = pd.DataFrame(stats2, columns = headers2[1:])
-df2.to_csv('/home/dalton/Desktop/betting/per100poss_team.csv', index = False)
+df2.to_csv('{}per100poss_team.csv'.format(FOLDER_PATH), index = False)
 
 
 tab3 = alltab[9]
@@ -66,7 +68,7 @@ headers3 = [th.getText() for th in rows3[0].findAll('th')]
 stats3 = [[td.getText() for td in rows3[i].findAll('td')] for i in np.arange(1,len(rows3))]
 
 df3 = pd.DataFrame(stats3, columns = headers3[1:])
-df3.to_csv('/home/dalton/Desktop/betting/per100poss_oppo.csv', index = False)
+df3.to_csv('{}per100poss_oppo.csv'.format(FOLDER_PATH), index = False)
 
 
 
@@ -80,7 +82,7 @@ headers4 = [th.getText() for th in rows4[1].findAll('th')]
 stats4 = [[td.getText() for td in rows4[i].findAll('td')] for i in np.arange(2,len(rows4)-1)]
 
 df4 = pd.DataFrame(stats4, columns = headers4[1:])
-df4.to_csv('/home/dalton/Desktop/betting/shooting_team.csv', index = False)
+df4.to_csv('{}shooting_team.csv'.format(FOLDER_PATH), index = False)
 
 
 tab5 = alltab[12]
@@ -89,4 +91,19 @@ headers5 = [th.getText() for th in rows5[1].findAll('th')]
 stats5 = [[td.getText() for td in rows5[i].findAll('td')] for i in np.arange(2,len(rows5)-1)]
 
 df5 = pd.DataFrame(stats5, columns = headers5[1:])
-df5.to_csv('/home/dalton/Desktop/betting/shooting_oppo.csv', index =  False)
+df5.to_csv('{}shooting_oppo.csv'.format(FOLDER_PATH), index =  False)
+
+
+### Scrap player data ###
+
+url3 = 'https://www.basketball-reference.com/leagues/NBA_{}_per_poss.html'.format(year)
+html3 = urlopen(url3)
+soup3 = BeautifulSoup(html3)
+tab6 = soup3.findAll('table')[0]
+rows6 = tab6.findAll('tr')
+headers6 = [th.getText() for th in rows6[0].findAll('th')]
+stats6 = [[td.getText() for td in rows6[i].findAll('td')] for i in np.arange(1,len(rows6))]
+stats6 = [ l for l in stats6 if l]
+
+df6 = pd.DataFrame(stats6, columns= headers6[1:])
+df6.to_csv('{}players_stats.csv'.format(FOLDER_PATH), index  = False)
