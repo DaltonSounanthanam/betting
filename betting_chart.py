@@ -55,13 +55,39 @@ def prob_positive_earning(c, p, T):
 def Odd_to_probabilty(Odd):
     return 1/Odd
 
-
+### this compute the prob the ramdom walk is 0 at time T, not really the bankrupcy
 def prob_bankruptcy(c, p, T, b, cash):
     prob = 0
-    i = math.ceil((b*T - cash)/(c*b))
+    i = math.floor((b*T - cash)/(c*b))
     prob = comb(T-1,i-1)*p**i*(1 - p)**(T-i)
     return prob
 
+def prob_bankruptcy_overall(c, p, T, b, cash):
+    prob = 0
+    for i in np.arange(1, T+1):
+        prob = prob + prob_bankruptcy(c, p, i, b, cash)
+    return prob
+
+
+def stoping_time_monte_carlo(c, p, T, b, cash, n = 1000):
+    count = np.zeros(T + 1)
+    np.random.seed()
+    for i in range(n):
+        samples = np.random.binomial(1, p, T)
+        earnings = (samples*(c-1) - (np.ones(T) - samples))*b
+        for j in np.arange(1, T):
+            tmp1 = earnings[j-1]
+            tmp2 = earnings[j]
+            earnings[j] = tmp1 + tmp2
+        earnings = earnings + cash
+        index = np.where(earnings <= 0)[0]
+        if index.size == 0:
+            tmp = count[-1]
+            count[-1] = count[-1] + 1
+        else:
+            tmp = count[int(index[0])]
+            count[int(index[0])] = tmp + 1
+    return count/n
 
 def money_vs_time(c, p, T, b, cash):
     return (T*b*((c-1)*p - (1-p))/cash) + 1
