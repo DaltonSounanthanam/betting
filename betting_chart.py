@@ -55,21 +55,9 @@ def prob_positive_earning(c, p, T):
 def Odd_to_probabilty(Odd):
     return 1/Odd
 
-### this compute the prob the ramdom walk is 0 at time T, not really the bankrupcy
-def prob_bankruptcy(c, p, T, b, cash):
-    prob = 0
-    i = math.floor((b*T - cash)/(c*b))
-    prob = comb(T-1,i-1)*p**i*(1 - p)**(T-i)
-    return prob
-
-def prob_bankruptcy_overall(c, p, T, b, cash):
-    prob = 0
-    for i in np.arange(1, T+1):
-        prob = prob + prob_bankruptcy(c, p, i, b, cash)
-    return prob
 
 
-def stoping_time_monte_carlo(c, p, T, b, cash, n = 1000):
+def stoping_time_monte_carlo(c, p, T, b, cash, n = 100000):
     count = np.zeros(T + 1)
     np.random.seed()
     for i in range(n):
@@ -88,6 +76,24 @@ def stoping_time_monte_carlo(c, p, T, b, cash, n = 1000):
             tmp = count[int(index[0])]
             count[int(index[0])] = tmp + 1
     return count/n
+
+
+### compute the prob of bankruptcy before T (included)
+def prob_bankruptcy(c, p, T, b, cash):
+    probs = stoping_time_monte_carlo(c, p, T, b, cash)
+    return 1 - probs[-1]
+
+### compute the prob of bankruptcy after T (excluded)
+def prob_no_bankruptcy(c, p, T, b, cash):
+    probs = stoping_time_monte_carlo(c, p, T, b, cash)
+    return probs[-1]
+
+### compute bankruptcy at time T
+def prob_bankruptcy_t(c, p, T, b, cash):
+    p1 = prob_no_bankruptcy(c, p, T , b, cash)
+    p2 = prob_no_bankruptcy(c, p, T - 1, b, cash)
+    return p2 - p1
+
 
 def money_vs_time(c, p, T, b, cash):
     return (T*b*((c-1)*p - (1-p))/cash) + 1
@@ -142,6 +148,7 @@ ax2.set_title('Odd to probability')
 
 # Bankruptcy, bet too high lead to bankruptcy
 
+'''
 fig3, ax3 = plt.subplots()
 
 for j in np.arange(1.1, 3.1, 0.1 ):
@@ -153,7 +160,8 @@ for j in np.arange(1.1, 3.1, 0.1 ):
 ax3.set_title('Bankruptcy probability')
 ax3.set_xlabel('bet')
 ax3.set_ylabel('probability')
-    
+'''    
+
 # Time, bet too low you dont make money during your lifetime
 
 fig4, ax4 = plt.subplots()
