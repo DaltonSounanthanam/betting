@@ -11,6 +11,7 @@ import numpy as np
 
 FOLDER_PATH = '/home/dalton/Desktop/betting/'
 
+'''
 ### drop the nan value row and useless columns ### this task should be automatized
 schedule = pd.read_csv('{}schedule.csv'.format(FOLDER_PATH))
 schedule = schedule.drop(['Notes'], axis = 1)
@@ -62,4 +63,33 @@ for i in np.arange(schedule.shape[0]):
 data = pd.concat(row_list, axis = 0 )
 data = data.iloc[index].reset_index(drop = True)    
 data.to_csv('{}features3.csv'.format(FOLDER_PATH), index = False)
+'''
+
+def compute_total_score(filename):
+    scores = pd.read_csv(FOLDER_PATH + filename)
+    a = scores['Home_score']
+    b = scores['Away_score']
+    t = a + b
+
+    a1 = scores['Away_1']
+    b1 = scores['Home_1']
+    t1 = a1 + b1
+
+    a2 = scores['Away_2']
+    b2 = scores['Home_2']
+    t2 = a2 + b2
+
+    a3 = scores['Away_3']
+    b3 = scores['Home_3']
+    t3 = a3 + b3
+
+    a4 = scores['Away_4']
+    b4 = scores['Home_4']
+    t4 = a4 + b4
     
+    scores['T'] = t
+    scores['T1'] = t1
+    scores['T2'] = t2
+    scores['T3'] = t3
+    scores['T4'] = t4
+    scores.to_csv(FOLDER_PATH + 'process_' + filename , index = False)

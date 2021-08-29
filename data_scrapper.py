@@ -156,5 +156,10 @@ def scrap_scores(date_from, date_to, FOLDER_PATH = FOLDER_PATH):
     return df
 
 
-tmp = scrap_scores('1/1/2021', '1/8/2021')
+def scrap_player_split_stats():
+    return None
+
+
+def scrap_player_gamelog():
+    return None
     
