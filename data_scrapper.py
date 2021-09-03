@@ -156,10 +156,20 @@ def scrap_scores(date_from, date_to, FOLDER_PATH = FOLDER_PATH):
     return df
 
 
-def scrap_player_split_stats():
-    return None
-
+def scrap_player_split_stats( player = 'jamesle01',year = 2021):
+    url = 'https://www.basketball-reference.com/players/{}/{}/splits/{}'.format(player[0], player, year)
+    html = urlopen(url)
+    soup = BeautifulSoup(html)
+    rows = soup.findAll('tr')[1:]
+    header = [th.getText() for th in rows[0].findAll('th')]
+    tmp = [[td.getText() for td in rows[i].findAll('td')] for i in np.arange(1, len(rows))]
+    tmp = [l for l in tmp if l]
+    df = pd.DataFrame(tmp, columns = header[1:])
+    df.to_csv(FOLDER_PATH + player + '_splits_stats.csv')
+    return df
 
 def scrap_player_gamelog():
     return None
+
+tmp = scrap_player_split_stats()
     
